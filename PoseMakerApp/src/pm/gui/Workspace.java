@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pm.PoseMaker;
 import pm.PropertyType;
-import pm.controller.PageEditController;
+import pm.controller.WorkspaceController;
 import saf.ui.AppGUI;
 import saf.AppTemplate;
 import saf.components.AppWorkspaceComponent;
@@ -37,8 +37,8 @@ public class Workspace extends AppWorkspaceComponent {
     // IT KNOWS THE GUI IT IS PLACED INSIDE
     AppGUI gui;
     
-    //The PageEditController that we'll use to assign buttons their event handlers
-    PageEditController pageEditController;
+    //The WorkspaceController that we'll use to assign buttons their event handlers
+    WorkspaceController pageEditController;
     
     //The BorderPane we will put our toolbars and rendering surface in
     BorderPane workspaceBP;
@@ -87,7 +87,7 @@ public class Workspace extends AppWorkspaceComponent {
 	gui = app.getGUI();
         
         //This will handle events for us
-        pageEditController = new PageEditController((PoseMaker) app);
+        pageEditController = new WorkspaceController((PoseMaker) app);
         
         //Create a new Pane for workspace
         workspace = new Pane();

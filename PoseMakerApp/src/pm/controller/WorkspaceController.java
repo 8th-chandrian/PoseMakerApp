@@ -3,17 +3,18 @@
  */
 package pm.controller;
 
+import pm.PoseMaker;
 import saf.AppTemplate;
 
 /**
  *
  * @author Noah
  */
-public class PageEditController {
+public class WorkspaceController {
     
     //TODO: Create handler methods, finish constructor which takes a PoseMaker element as its argument
     
-    public PageEditController(AppTemplate app){
+    public WorkspaceController(PoseMaker app){
         //TODO: Complete constructor
     }
     
