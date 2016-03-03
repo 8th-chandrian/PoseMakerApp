@@ -4,8 +4,11 @@ import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import pm.PoseMaker;
 import pm.PropertyType;
+import pm.controller.PageEditController;
 import saf.ui.AppGUI;
 import saf.AppTemplate;
 import saf.components.AppWorkspaceComponent;
@@ -20,12 +23,21 @@ import saf.components.AppWorkspaceComponent;
  */
 public class Workspace extends AppWorkspaceComponent {
 
-    static final int CREATION_BUTTON_WIDTH = 25;
+    static final int CREATION_BUTTON_WIDTH = 50;
+    static final int ORDER_BUTTON_WIDTH = 100;
+    static final int CAMERA_BUTTON_WIDTH = 200;
+    
     // HERE'S THE APP
     AppTemplate app;
 
     // IT KNOWS THE GUI IT IS PLACED INSIDE
     AppGUI gui;
+    
+    //The PageEditController that we'll use to assign buttons their event handlers
+    PageEditController pageEditController;
+    
+    //The BorderPane we will put our toolbars and rendering surface in
+    BorderPane workspaceBP;
     
     //The left sidebar containing all workspace controls
     VBox editToolbar;
@@ -40,7 +52,7 @@ public class Workspace extends AppWorkspaceComponent {
     VBox screenshotBar;
     
     //The array of buttons for creationBar
-    Button[] creationButtons;
+    Button[] buttons;
 
     /**
      * Constructor for initializing the workspace, note that this constructor
@@ -58,8 +70,14 @@ public class Workspace extends AppWorkspaceComponent {
 	// KEEP THE GUI FOR LATER
 	gui = app.getGUI();
         
-        //Create a new borderpane
-        workspace = new BorderPane();
+        //This will handle events for us
+        pageEditController = new PageEditController((PoseMaker) app);
+        
+        //Create a new Pane for workspace
+        workspace = new Pane();
+        
+        //Create a new BorderPane which we will put in workspace
+        workspaceBP = new BorderPane();
         
         //Create the left sidebar
         editToolbar = new VBox();
@@ -73,32 +91,95 @@ public class Workspace extends AppWorkspaceComponent {
         oThicknessBar = new VBox();
         screenshotBar = new VBox();
         
-        //Now initialize the array of buttons in creationBar
-        creationButtons = new Button[4];
-        for(int i = 0; i < 4; i++){
+        //Now initialize all the buttons being used
+        buttons = new Button[7];
+        for(int i = 0; i < 7; i++){
+            //Buttons 0 - 3 will be part of creationBar
             if(i == 0){
-                creationButtons[i] = gui.initChildButton(creationBar, PropertyType.ELLIPSE_ICON.toString(), 
+                buttons[i] = gui.initChildButton(creationBar, PropertyType.ELLIPSE_ICON.toString(), 
                     PropertyType.ELLIPSE_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleEllipseButtonPress();
+                });
+                buttons[i].setMaxWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setMinWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(CREATION_BUTTON_WIDTH);
             }
             if(i == 1){
-                creationButtons[i] = gui.initChildButton(creationBar, PropertyType.RECTANGLE_ICON.toString(), 
+                buttons[i] = gui.initChildButton(creationBar, PropertyType.RECTANGLE_ICON.toString(), 
                     PropertyType.RECTANGLE_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleRectangleButtonPress();
+                });
+                buttons[i].setMaxWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setMinWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(CREATION_BUTTON_WIDTH);
             }
             if(i == 2){
-                creationButtons[i] = gui.initChildButton(creationBar, PropertyType.REMOVE_ICON.toString(), 
+                buttons[i] = gui.initChildButton(creationBar, PropertyType.REMOVE_ICON.toString(), 
                     PropertyType.REMOVE_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleRemoveButtonPress();
+                });
+                buttons[i].setMaxWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setMinWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(CREATION_BUTTON_WIDTH);
             }
             if(i == 3){
-                creationButtons[i] = gui.initChildButton(creationBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
+                buttons[i] = gui.initChildButton(creationBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
                     PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleSelectionButtonPress();
+                });
+                buttons[i].setMaxWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setMinWidth(CREATION_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(CREATION_BUTTON_WIDTH);
             }
             
-            creationButtons[i].setMaxWidth(CREATION_BUTTON_WIDTH);
-            creationButtons[i].setMinWidth(CREATION_BUTTON_WIDTH);
-            creationButtons[i].setPrefWidth(CREATION_BUTTON_WIDTH);
+            //Buttons 4 and 5 will be part of orderBar
+            //TODO: Get the button images for order up and order down buttons, add in handlers
+            if(i == 4){
+                buttons[i] = gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
+                    PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleSelectionButtonPress();
+                });
+                buttons[i].setMaxWidth(ORDER_BUTTON_WIDTH);
+                buttons[i].setMinWidth(ORDER_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(ORDER_BUTTON_WIDTH);
+            }
+            if(i == 5){
+                buttons[i] = gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
+                    PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleSelectionButtonPress();
+                });
+                buttons[i].setMaxWidth(ORDER_BUTTON_WIDTH);
+                buttons[i].setMinWidth(ORDER_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(ORDER_BUTTON_WIDTH);
+            }
+            
+            //Button 6 holds the camera button
+            if(i == 6){
+                buttons[i] = gui.initChildButton(screenshotBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
+                    PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false);
+                buttons[i].setOnAction(e -> {
+                    pageEditController.handleSelectionButtonPress();
+                });
+                buttons[i].setMaxWidth(CAMERA_BUTTON_WIDTH);
+                buttons[i].setMinWidth(CAMERA_BUTTON_WIDTH);
+                buttons[i].setPrefWidth(CAMERA_BUTTON_WIDTH);
+            }
         }
         
+        //Add toolbars to the editing toolbar
+        editToolbar.getChildren().add(creationBar);
+        editToolbar.getChildren().add(orderBar);
         
+        
+        
+        workspaceBP.setLeft(editToolbar);
+        workspace.getChildren().add(workspaceBP);
     }
     
     /**
@@ -109,9 +190,8 @@ public class Workspace extends AppWorkspaceComponent {
      */
     @Override
     public void initStyle() {
-	// NOTE THAT EACH CLASS SHOULD CORRESPOND TO
-	// A STYLE CLASS SPECIFIED IN THIS APPLICATION'S
-	// CSS FILE
+        creationBar.getStyleClass().add("bordered_pane");
+        orderBar.getStyleClass().add("bordered_pane");
     }
 
     /**

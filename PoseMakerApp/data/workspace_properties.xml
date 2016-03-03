@@ -7,20 +7,20 @@
 <properties>
     <property_list>
         <!-- PROGRAM ICON FILES -->
-        <Property name="ELLIPSE_ICON"           value="Ellipse.png"></Property>
-        <Property name="RECTANGLE_ICON"         value="Rect.png"></Property>
-        <Property name="REMOVE_ICON"            value="Remove.png"></Property>
-        <Property name="SELECTION_TOOL_ICON"    value="SelectionTool.png"></Property>
-        <Property name="SNAPSHOT_ICON"          value="Snapshot.png"></Property>
+        <property name="ELLIPSE_ICON"           value="Ellipse.png"></property>
+        <property name="RECTANGLE_ICON"         value="Rect.png"></property>
+        <property name="REMOVE_ICON"            value="Remove.png"></property>
+        <property name="SELECTION_TOOL_ICON"    value="SelectionTool.png"></property>
+        <property name="SNAPSHOT_ICON"          value="Snapshot.png"></property>
         
         <!-- TOOLTIPS FOR BUTTONS -->
-        <Property name="ELLIPSE_TOOLTIP"        value="Draw an Ellipse"></Property>
-        <Property name="RECTANGLE_TOOLTIP"      value="Draw a Rectangle"></Property>
-        <Property name="REMOVE_TOOLTIP"         value="Remove Selected Element"></Property>
-        <Property name="SELECTION_TOOL_TOOLTIP" value="Select an Element"></Property>
-        <Property name="SNAPSHOT_TOOLTIP"       value="Export Drawing to Image File"></Property>
+        <property name="ELLIPSE_TOOLTIP"        value="Draw an Ellipse"></property>
+        <property name="RECTANGLE_TOOLTIP"      value="Draw a Rectangle"></property>
+        <property name="REMOVE_TOOLTIP"         value="Remove Selected Element"></property>
+        <property name="SELECTION_TOOL_TOOLTIP" value="Select an Element"></property>
+        <property name="SNAPSHOT_TOOLTIP"       value="Export Drawing to Image File"></property>
 	<!-- MESSAGES -->
-		
+	
 	<!-- ERROR MESSAGES AND TITLES FOR THEIR DIALOGS -->
 
     </property_list>
