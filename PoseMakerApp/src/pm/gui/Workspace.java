@@ -271,6 +271,7 @@ public class Workspace extends AppWorkspaceComponent {
 
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);
+        reloadButtons(workspaceController.NOTHING_SELECTED, workspaceController.NOTHING_SELECTED);
     }
     
     /**
@@ -296,6 +297,46 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
 
+    }
+    
+    public void reloadButtons(String selectedButton, String selectedShape){
+        if(selectedButton.equals(workspaceController.ELLIPSE_SELECTED)){
+            buttons.get(0).setDisable(true); //Disable the ellipse button since it is already selected
+            buttons.get(1).setDisable(false); //Enable the rectantgle button
+            buttons.get(2).setDisable(true); //Disable the remove button because no shapes are selected
+            buttons.get(3).setDisable(false); //Enable the selection button
+            buttons.get(4).setDisable(true);//Disable both order switching buttons since no shapes are selected
+            buttons.get(5).setDisable(true);
+            buttons.get(6).setDisable(false); //Enable the snapshot button
+        }
+        else if(selectedButton.equals(workspaceController.RECTANGLE_SELECTED)){
+            buttons.get(0).setDisable(false); //Enable the ellipse button
+            buttons.get(1).setDisable(true); //Disable the rectantgle button since it is already selected
+            buttons.get(2).setDisable(true); //Disable the remove button because no shapes are selected
+            buttons.get(3).setDisable(false); //Enable the selection button
+            buttons.get(4).setDisable(true);//Disable both order switching buttons since no shapes are selected
+            buttons.get(5).setDisable(true);
+            buttons.get(6).setDisable(false); //Enable the snapshot button
+        }
+        else if(selectedButton.equals(workspaceController.SELECTOR_SELECTED)){
+            buttons.get(0).setDisable(false); //Enable the ellipse button
+            buttons.get(1).setDisable(false); //Enable the rectangle button
+            buttons.get(2).setDisable(selectedShape == null); //Disable the remove button if no shape is selected
+            buttons.get(3).setDisable(true); //Disable the selection button
+            buttons.get(4).setDisable(selectedShape == null);//Disable both order switching buttons if no shape is selected
+            buttons.get(5).setDisable(selectedShape == null);
+            buttons.get(6).setDisable(false); //Enable the snapshot button
+        }
+        //If no button is currently selected, reloadButtons defaults to this
+        else{
+            buttons.get(0).setDisable(false); //Enable the ellipse button
+            buttons.get(1).setDisable(false); //Enable the rectangle button
+            buttons.get(2).setDisable(true); //Disable the remove button since no shape is selected
+            buttons.get(3).setDisable(false); //Enable the selection button
+            buttons.get(4).setDisable(true);//Disable both order switching buttons since no shape is selected
+            buttons.get(5).setDisable(true);
+            buttons.get(6).setDisable(false); //Enable the snapshot button
+        }
     }
     
     /**

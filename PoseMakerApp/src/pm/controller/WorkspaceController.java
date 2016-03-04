@@ -15,17 +15,26 @@ import saf.AppTemplate;
 public class WorkspaceController {
     
     //TODO: Create handler methods, finish constructor which takes a PoseMaker element as its argument
-    Workspace workspace;
+    public static final String ELLIPSE_SELECTED = "ellipse";
+    public static final String RECTANGLE_SELECTED = "rectangle";
+    public static final String SELECTOR_SELECTED = "selector";
+    public static final String NOTHING_SELECTED = "nothing";
     
-    public WorkspaceController(PoseMaker app){
-        workspace = (Workspace) app.getWorkspaceComponent();
+    PoseMaker app;
+    String buttonSelected;
+    String shapeSelected;
+    
+    
+    public WorkspaceController(PoseMaker initapp){
+        app = initapp;
+        buttonSelected = NOTHING_SELECTED;
+        shapeSelected = NOTHING_SELECTED;
     }
     
     public void handleEllipseButtonPress(){
-        //TODO: Add functionality to handle the ellipse button being pressed
-        //Button should be disabled after being pressed, while enabling the rectangle and select buttons and 
-        //disabling the remove button, and the cursor should change to a crosshairs while user is enabled 
-        //to draw ellipses on the rendering surface
+        buttonSelected = ELLIPSE_SELECTED;
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.reloadButtons(buttonSelected, shapeSelected);
     }
     
     public void handleRectangleButtonPress() {
@@ -43,5 +52,4 @@ public class WorkspaceController {
         //TODO: Add functionality to handle the remove button being pressed
         //If a shape is currently selected, pressing the remove button should remove it from the rendering surface
     }
-    
 }
