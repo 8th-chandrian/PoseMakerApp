@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import pm.PoseMaker;
 import pm.PropertyType;
 import pm.controller.WorkspaceController;
+import pm.data.DataManager;
 import saf.ui.AppGUI;
 import saf.AppTemplate;
 import saf.components.AppWorkspaceComponent;
@@ -226,10 +227,9 @@ public class Workspace extends AppWorkspaceComponent {
         colorPickers = new ArrayList<ColorPicker>();
         
         ColorPicker backgroundPicker = new ColorPicker();
-        //TODO: FIX FUNCTIONALITY HERE
+        //TODO: FIX FUNCTIONALITY HERE, USE reloadWorkspace()
         backgroundPicker.setOnAction(e -> {
-            Color newBackground = backgroundPicker.getValue();
-            canvas.setStyle("-fx-background-color: " + toHex(newBackground));
+            //USE RELOADWORKSPACE() HERE
         });
         colorPickers.add(backgroundPicker);
         ColorPicker fillPicker = new ColorPicker();
@@ -301,7 +301,7 @@ public class Workspace extends AppWorkspaceComponent {
      */
     @Override
     public void reloadWorkspace() {
-
+        DataManager data = (DataManager) app.getDataComponent();
     }
     
     public void reloadButtons(String selectedButton, String selectedShape){

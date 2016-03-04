@@ -1,5 +1,6 @@
 package pm.data;
 
+import java.util.ArrayList;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
 
@@ -13,6 +14,8 @@ import saf.AppTemplate;
 public class DataManager implements AppDataComponent {
     // THIS IS A SHARED REFERENCE TO THE APPLICATION
     AppTemplate app;
+    
+    private ArrayList<CustomShape> shapes;
 
     /**
      * THis constructor creates the data manager and sets up the
@@ -23,6 +26,15 @@ public class DataManager implements AppDataComponent {
     public DataManager(AppTemplate initApp) throws Exception {
 	// KEEP THE APP FOR LATER
 	app = initApp;
+        shapes = new ArrayList<CustomShape>();
+    }
+    
+    /**
+     * Getter for shapes ArrayList
+     * @return shapes
+     */
+    public ArrayList<CustomShape> getShapes(){
+        return shapes;
     }
 
     /**
