@@ -2,13 +2,18 @@ package pm.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import pm.PoseMaker;
 import pm.PropertyType;
@@ -30,6 +35,8 @@ public class Workspace extends AppWorkspaceComponent {
     static final int CREATION_BUTTON_WIDTH = 50;
     static final int ORDER_BUTTON_WIDTH = 100;
     static final int CAMERA_BUTTON_WIDTH = 200;
+    static final int CANVAS_WIDTH = 1000;
+    static final int CANVAS_HEIGHT = 635;
     
     // HERE'S THE APP
     AppTemplate app;
@@ -69,6 +76,10 @@ public class Workspace extends AppWorkspaceComponent {
     
     //The array of color pickers
     ArrayList<ColorPicker> colorPickers;
+    
+    //Rendering objects
+    Pane canvas;
+    String defaultBackgroundColor;
 
     /**
      * Constructor for initializing the workspace, note that this constructor
@@ -94,7 +105,7 @@ public class Workspace extends AppWorkspaceComponent {
         
         //Create a new BorderPane which we will put in workspace
         workspaceBP = new BorderPane();
-        
+
         //Create the left sidebar
         editToolbar = new VBox();
         
@@ -245,6 +256,13 @@ public class Workspace extends AppWorkspaceComponent {
         for(int i = 0; i < toolbars.size(); i++){
             editToolbar.getChildren().add(toolbars.get(i));
         }
+        
+        //Create a new Pane; this will be our render surface
+        canvas = new Pane();
+        canvas.setPrefSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        workspaceBP.setCenter(canvas);
+        defaultBackgroundColor = "WHITE";
+        canvas.setStyle("-fx-background-color: " + defaultBackgroundColor);
 
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);
