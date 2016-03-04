@@ -79,7 +79,8 @@ public class Workspace extends AppWorkspaceComponent {
     ArrayList<ColorPicker> colorPickers;
     
     //Rendering objects
-    Pane canvas;
+    Canvas canvas;
+    GraphicsContext gc;
 
     /**
      * Constructor for initializing the workspace, note that this constructor
@@ -175,20 +176,20 @@ public class Workspace extends AppWorkspaceComponent {
             //Buttons 4 and 5 will be part of orderBar
             //TODO: Get the button images for order up and order down buttons, add in handlers
             if(i == 4){
-                buttons.add(gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
-                    PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false));
+                buttons.add(gui.initChildButton(orderBar, PropertyType.MOVE_TO_BACK_ICON.toString(), 
+                    PropertyType.MOVE_TO_BACK_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    workspaceController.handleSelectionButtonPress();
+                    workspaceController.handleBackButtonPress();
                 });
                 buttons.get(i).setMaxWidth(ORDER_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(ORDER_BUTTON_WIDTH);
                 buttons.get(i).setPrefWidth(ORDER_BUTTON_WIDTH);
             }
             if(i == 5){
-                buttons.add(gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
-                    PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false));
+                buttons.add(gui.initChildButton(orderBar, PropertyType.MOVE_TO_FRONT_ICON.toString(), 
+                    PropertyType.MOVE_TO_FRONT_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    workspaceController.handleSelectionButtonPress();
+                    workspaceController.handleFrontButtonPress();
                 });
                 buttons.get(i).setMaxWidth(ORDER_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(ORDER_BUTTON_WIDTH);
@@ -225,6 +226,7 @@ public class Workspace extends AppWorkspaceComponent {
         colorPickers = new ArrayList<ColorPicker>();
         
         ColorPicker backgroundPicker = new ColorPicker();
+        //TODO: FIX FUNCTIONALITY HERE
         backgroundPicker.setOnAction(e -> {
             Color newBackground = backgroundPicker.getValue();
             canvas.setStyle("-fx-background-color: " + toHex(newBackground));
@@ -255,7 +257,7 @@ public class Workspace extends AppWorkspaceComponent {
         oThicknessBar.getChildren().add(labels.get(3));
         
         //Initialize the thickness slider and add to oThicknessBar
-        thickness = new Slider(1, 10, 1);
+        thickness = new Slider(0, 10, 0);
         oThicknessBar.getChildren().add(thickness);
         
         //Add toolbars to the editing toolbar
@@ -263,11 +265,14 @@ public class Workspace extends AppWorkspaceComponent {
             editToolbar.getChildren().add(toolbars.get(i));
         }
         
-        //Create a new Pane; this will be our render surface
-        canvas = new Pane();
-        canvas.setPrefSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        //Create a new Canvas; this will be our render surface
+        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         workspaceBP.setCenter(canvas);
-        canvas.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR);
+        gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.valueOf(DEFAULT_BACKGROUND_COLOR));
+        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        //canvas.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR);
+        
 
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);

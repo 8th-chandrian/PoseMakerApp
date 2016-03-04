@@ -38,8 +38,9 @@ public class WorkspaceController {
     }
     
     public void handleRectangleButtonPress() {
-        //TODO: Add functionality to handle the ellipse button being pressed
-        //Functionality is similar to the handleEllipseButtonPress method above, but user can draw rectangles instead
+        buttonSelected = RECTANGLE_SELECTED;
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.reloadButtons(buttonSelected, shapeSelected);
     }
 
     public void handleSelectionButtonPress() {
@@ -51,5 +52,13 @@ public class WorkspaceController {
     public void handleRemoveButtonPress() {
         //TODO: Add functionality to handle the remove button being pressed
         //If a shape is currently selected, pressing the remove button should remove it from the rendering surface
+    }
+
+    public void handleBackButtonPress() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void handleFrontButtonPress() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
