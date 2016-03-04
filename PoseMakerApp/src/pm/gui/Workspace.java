@@ -37,6 +37,7 @@ public class Workspace extends AppWorkspaceComponent {
     static final int CAMERA_BUTTON_WIDTH = 200;
     static final int CANVAS_WIDTH = 1000;
     static final int CANVAS_HEIGHT = 635;
+    static final String DEFAULT_BACKGROUND_COLOR = "WHITE";
     
     // HERE'S THE APP
     AppTemplate app;
@@ -79,7 +80,6 @@ public class Workspace extends AppWorkspaceComponent {
     
     //Rendering objects
     Pane canvas;
-    String defaultBackgroundColor;
 
     /**
      * Constructor for initializing the workspace, note that this constructor
@@ -226,7 +226,8 @@ public class Workspace extends AppWorkspaceComponent {
         
         ColorPicker backgroundPicker = new ColorPicker();
         backgroundPicker.setOnAction(e -> {
-            workspaceController.handleBackgroundChange();
+            Color newBackground = backgroundPicker.getValue();
+            canvas.setStyle("-fx-background-color: " + toHex(newBackground));
         });
         colorPickers.add(backgroundPicker);
         ColorPicker fillPicker = new ColorPicker();
@@ -266,8 +267,7 @@ public class Workspace extends AppWorkspaceComponent {
         canvas = new Pane();
         canvas.setPrefSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         workspaceBP.setCenter(canvas);
-        defaultBackgroundColor = "WHITE";
-        canvas.setStyle("-fx-background-color: " + defaultBackgroundColor);
+        canvas.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR);
 
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);
@@ -296,5 +296,35 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
 
+    }
+    
+    /**
+     * Converts a Color object to a hex string (for use with ColorPicker objects)
+     * @param c
+     *      The color being converted
+     * @return 
+     *      The 7-character hex string beginning with a '#'
+     */
+    public static String toHex(Color c){
+        //First convert to their integer value
+        int redInt = (int)(c.getRed() * 255);
+        int greenInt = (int)(c.getGreen() * 255);
+        int blueInt = (int)(c.getBlue() * 255);
+        
+        //Then convert their int values to hex strings
+        String redString = Integer.toHexString(redInt);
+        String greenString = Integer.toHexString(greenInt);
+        String blueString = Integer.toHexString(blueInt);
+        
+        if(redInt == 0)
+            redString = "00";
+        if(greenInt == 0)
+            greenString = "00";
+        if(blueInt == 0)
+            blueString = "00";
+        
+        //Then concatenate
+        String hexString = "#" + redString + greenString + blueString;
+        return hexString;
     }
 }

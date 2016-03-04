@@ -3,7 +3,9 @@
  */
 package pm.controller;
 
+import javafx.scene.paint.Color;
 import pm.PoseMaker;
+import pm.gui.Workspace;
 import saf.AppTemplate;
 
 /**
@@ -13,9 +15,10 @@ import saf.AppTemplate;
 public class WorkspaceController {
     
     //TODO: Create handler methods, finish constructor which takes a PoseMaker element as its argument
+    Workspace workspace;
     
     public WorkspaceController(PoseMaker app){
-        //TODO: Complete constructor
+        workspace = (Workspace) app.getWorkspaceComponent();
     }
     
     public void handleEllipseButtonPress(){
@@ -39,10 +42,6 @@ public class WorkspaceController {
     public void handleRemoveButtonPress() {
         //TODO: Add functionality to handle the remove button being pressed
         //If a shape is currently selected, pressing the remove button should remove it from the rendering surface
-    }
-
-    public void handleBackgroundChange() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
