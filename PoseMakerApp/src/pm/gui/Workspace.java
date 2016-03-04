@@ -45,7 +45,7 @@ public class Workspace extends AppWorkspaceComponent {
     AppGUI gui;
     
     //The WorkspaceController that we'll use to assign buttons their event handlers
-    WorkspaceController pageEditController;
+    WorkspaceController workspaceController;
     
     //The BorderPane we will put our toolbars and rendering surface in
     BorderPane workspaceBP;
@@ -98,7 +98,7 @@ public class Workspace extends AppWorkspaceComponent {
 	gui = app.getGUI();
         
         //This will handle events for us
-        pageEditController = new WorkspaceController((PoseMaker) app);
+        workspaceController = new WorkspaceController((PoseMaker) app);
         
         //Create a new Pane for workspace
         workspace = new Pane();
@@ -135,7 +135,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(creationBar, PropertyType.ELLIPSE_ICON.toString(), 
                     PropertyType.ELLIPSE_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleEllipseButtonPress();
+                    workspaceController.handleEllipseButtonPress();
                 });
                 buttons.get(i).setMaxWidth(CREATION_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CREATION_BUTTON_WIDTH);
@@ -145,7 +145,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(creationBar, PropertyType.RECTANGLE_ICON.toString(), 
                     PropertyType.RECTANGLE_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleRectangleButtonPress();
+                    workspaceController.handleRectangleButtonPress();
                 });
                 buttons.get(i).setMaxWidth(CREATION_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CREATION_BUTTON_WIDTH);
@@ -155,7 +155,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(creationBar, PropertyType.REMOVE_ICON.toString(), 
                     PropertyType.REMOVE_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleRemoveButtonPress();
+                    workspaceController.handleRemoveButtonPress();
                 });
                 buttons.get(i).setMaxWidth(CREATION_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CREATION_BUTTON_WIDTH);
@@ -165,7 +165,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(creationBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
                     PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleSelectionButtonPress();
+                    workspaceController.handleSelectionButtonPress();
                 });
                 buttons.get(i).setMaxWidth(CREATION_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CREATION_BUTTON_WIDTH);
@@ -178,7 +178,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
                     PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleSelectionButtonPress();
+                    workspaceController.handleSelectionButtonPress();
                 });
                 buttons.get(i).setMaxWidth(ORDER_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(ORDER_BUTTON_WIDTH);
@@ -188,7 +188,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(orderBar, PropertyType.SELECTION_TOOL_ICON.toString(), 
                     PropertyType.SELECTION_TOOL_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleSelectionButtonPress();
+                    workspaceController.handleSelectionButtonPress();
                 });
                 buttons.get(i).setMaxWidth(ORDER_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(ORDER_BUTTON_WIDTH);
@@ -201,7 +201,7 @@ public class Workspace extends AppWorkspaceComponent {
                 buttons.add(gui.initChildButton(screenshotBar, PropertyType.SNAPSHOT_ICON.toString(), 
                     PropertyType.SNAPSHOT_ICON.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    pageEditController.handleSelectionButtonPress();
+                    workspaceController.handleSelectionButtonPress();
                 });
                 buttons.get(i).setMaxWidth(CAMERA_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CAMERA_BUTTON_WIDTH);
@@ -225,10 +225,15 @@ public class Workspace extends AppWorkspaceComponent {
         colorPickers = new ArrayList<ColorPicker>();
         
         ColorPicker backgroundPicker = new ColorPicker();
+        backgroundPicker.setOnAction(e -> {
+            workspaceController.handleBackgroundChange();
+        });
         colorPickers.add(backgroundPicker);
         ColorPicker fillPicker = new ColorPicker();
+        //TODO: Add event handler here
         colorPickers.add(fillPicker);
         ColorPicker outlinePicker = new ColorPicker();
+        //TODO: Add event handler here
         colorPickers.add(outlinePicker);
         
         for(int i = 0; i < 3; i++){

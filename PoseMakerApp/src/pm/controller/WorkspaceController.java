@@ -40,5 +40,9 @@ public class WorkspaceController {
         //TODO: Add functionality to handle the remove button being pressed
         //If a shape is currently selected, pressing the remove button should remove it from the rendering surface
     }
+
+    public void handleBackgroundChange() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
