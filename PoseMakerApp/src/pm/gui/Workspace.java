@@ -18,6 +18,9 @@ import javafx.scene.text.Text;
 import pm.PoseMaker;
 import pm.PropertyType;
 import pm.controller.WorkspaceController;
+import pm.data.CustomEllipse;
+import pm.data.CustomRectangle;
+import pm.data.CustomShape;
 import pm.data.DataManager;
 import saf.ui.AppGUI;
 import saf.AppTemplate;
@@ -35,10 +38,9 @@ public class Workspace extends AppWorkspaceComponent {
 
     static final int CREATION_BUTTON_WIDTH = 50;
     static final int ORDER_BUTTON_WIDTH = 100;
-    static final int CAMERA_BUTTON_WIDTH = 200;
+    static final int CAMERA_BUTTON_WIDTH = 240;
     static final int CANVAS_WIDTH = 1000;
     static final int CANVAS_HEIGHT = 635;
-    static final String DEFAULT_BACKGROUND_COLOR = "WHITE";
     
     // HERE'S THE APP
     AppTemplate app;
@@ -227,16 +229,15 @@ public class Workspace extends AppWorkspaceComponent {
         colorPickers = new ArrayList<ColorPicker>();
         
         ColorPicker backgroundPicker = new ColorPicker();
-        //TODO: FIX FUNCTIONALITY HERE, USE reloadWorkspace()
         backgroundPicker.setOnAction(e -> {
-            //USE RELOADWORKSPACE() HERE
+            DataManager data = (DataManager) app.getDataComponent();
+            data.setBackgroundColor(backgroundPicker.getValue());
+            reloadWorkspace();
         });
         colorPickers.add(backgroundPicker);
         ColorPicker fillPicker = new ColorPicker();
-        //TODO: Add event handler here
         colorPickers.add(fillPicker);
-        ColorPicker outlinePicker = new ColorPicker();
-        //TODO: Add event handler here
+        ColorPicker outlinePicker = new ColorPicker(Color.BLACK);
         colorPickers.add(outlinePicker);
         
         for(int i = 0; i < 3; i++){
@@ -257,7 +258,7 @@ public class Workspace extends AppWorkspaceComponent {
         oThicknessBar.getChildren().add(labels.get(3));
         
         //Initialize the thickness slider and add to oThicknessBar
-        thickness = new Slider(0, 10, 0);
+        thickness = new Slider(1, 10, 1);
         oThicknessBar.getChildren().add(thickness);
         
         //Add toolbars to the editing toolbar
@@ -267,16 +268,38 @@ public class Workspace extends AppWorkspaceComponent {
         
         //Create a new Canvas; this will be our render surface
         canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        workspaceBP.setCenter(canvas);
-        gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.valueOf(DEFAULT_BACKGROUND_COLOR));
-        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        //canvas.setStyle("-fx-background-color: " + DEFAULT_BACKGROUND_COLOR);
         
-
+        //Initialize the mouse events
+        canvas.setOnMouseEntered(e -> {
+            workspaceController.handleMouseEntered();
+        });
+        canvas.setOnMouseExited(e -> {
+            workspaceController.handleMouseExited();
+        });
+        canvas.setOnMousePressed(e -> {
+            int x = (int) e.getX();
+            int y = (int) e.getY();
+            workspaceController.handleMousePressed(x, y);
+        });
+        canvas.setOnMouseDragged(e -> {
+            int x = (int) e.getX();
+            int y = (int) e.getY();
+            workspaceController.handleMouseDragged(x, y);
+        });
+        canvas.setOnMouseReleased(e -> {
+            workspaceController.handleMouseReleased();
+        });
+        
+        //Set the canvas to the center pane of the workspace BorderPane
+        workspaceBP.setCenter(canvas);
+        
+        //Initialize gc to the canvas object's GraphicsContext
+        gc = canvas.getGraphicsContext2D();
+        
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);
-        reloadButtons(workspaceController.NOTHING_SELECTED, workspaceController.NOTHING_SELECTED);
+        reloadButtons(workspaceController.NOTHING_SELECTED, false);
+        reloadWorkspace();
     }
     
     /**
@@ -288,7 +311,7 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void initStyle() {
         for(int i = 0; i < toolbars.size(); i++){
-            toolbars.get(i).getStyleClass().add("bordered_pane");
+            toolbars.get(i).getStyleClass().add("left_toolbar");
         }
         for(int i = 0; i < labels.size(); i++){
             labels.get(i).getStyleClass().add("heading_label");
@@ -302,10 +325,17 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
         DataManager data = (DataManager) app.getDataComponent();
+        //Draw a new rectangle with our background color
+        gc.setFill(colorPickers.get(0).getValue());
+        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        
+        for(int i = 0; i < data.getShapes().size(); i++){
+            drawShape(data.getShapes().get(i));
+        }
     }
     
-    public void reloadButtons(String selectedButton, String selectedShape){
-        if(selectedButton.equals(workspaceController.ELLIPSE_SELECTED)){
+    public void reloadButtons(String selectedButton, boolean selectedShape){
+        if(selectedButton.equals(workspaceController.ELLIPSE)){
             buttons.get(0).setDisable(true); //Disable the ellipse button since it is already selected
             buttons.get(1).setDisable(false); //Enable the rectantgle button
             buttons.get(2).setDisable(true); //Disable the remove button because no shapes are selected
@@ -314,7 +344,7 @@ public class Workspace extends AppWorkspaceComponent {
             buttons.get(5).setDisable(true);
             buttons.get(6).setDisable(false); //Enable the snapshot button
         }
-        else if(selectedButton.equals(workspaceController.RECTANGLE_SELECTED)){
+        else if(selectedButton.equals(workspaceController.RECTANGLE)){
             buttons.get(0).setDisable(false); //Enable the ellipse button
             buttons.get(1).setDisable(true); //Disable the rectantgle button since it is already selected
             buttons.get(2).setDisable(true); //Disable the remove button because no shapes are selected
@@ -323,13 +353,13 @@ public class Workspace extends AppWorkspaceComponent {
             buttons.get(5).setDisable(true);
             buttons.get(6).setDisable(false); //Enable the snapshot button
         }
-        else if(selectedButton.equals(workspaceController.SELECTOR_SELECTED)){
+        else if(selectedButton.equals(workspaceController.SELECTOR)){
             buttons.get(0).setDisable(false); //Enable the ellipse button
             buttons.get(1).setDisable(false); //Enable the rectangle button
-            buttons.get(2).setDisable(selectedShape == null); //Disable the remove button if no shape is selected
+            buttons.get(2).setDisable(!selectedShape); //Disable the remove button if no shape is selected
             buttons.get(3).setDisable(true); //Disable the selection button
-            buttons.get(4).setDisable(selectedShape == null);//Disable both order switching buttons if no shape is selected
-            buttons.get(5).setDisable(selectedShape == null);
+            buttons.get(4).setDisable(!selectedShape);//Disable both order switching buttons if no shape is selected
+            buttons.get(5).setDisable(!selectedShape);
             buttons.get(6).setDisable(false); //Enable the snapshot button
         }
         //If no button is currently selected, reloadButtons defaults to this
@@ -344,6 +374,65 @@ public class Workspace extends AppWorkspaceComponent {
         }
     }
     
+    public void reloadControls(CustomShape s){
+        colorPickers.get(1).setValue(s.getFillColor());
+        colorPickers.get(2).setValue(s.getStrokeColor());
+        thickness.setValue(s.getLineWidth());
+    }
+    
+    /**
+     * Draws a given shape on the canvas
+     * @param s 
+     *      The shape to draw
+     */
+    public void drawShape(CustomShape s){
+        gc.setFill(s.getFillColor());
+        gc.setStroke(s.getStrokeColor());
+        gc.setLineWidth(s.getLineWidth());
+        if(s instanceof CustomRectangle){
+            gc.fillRect(s.getxValue(), s.getyValue(), s.getWidth(), s.getHeight());
+            gc.strokeRect(s.getxValue(), s.getyValue(), s.getWidth(), s.getHeight());
+        }
+        if(s instanceof CustomEllipse){
+            gc.fillOval(s.getxValue(), s.getyValue(), s.getWidth(), s.getHeight());
+            gc.strokeOval(s.getxValue(), s.getyValue(), s.getWidth(), s.getHeight());
+        }
+    }
+    
+    /**
+     * Gets the current shape fill as indicated by fillPicker
+     * @return the Color
+     */
+    public Color getShapeFill(){
+        return colorPickers.get(1).getValue();
+    }
+    
+    /**
+     * Gets the current line fill as indicated by outlinePicker
+     * @return the Color
+     */
+    public Color getLineFill(){
+        return colorPickers.get(2).getValue();
+    }
+    
+    /**
+     * Gets the current line thickness as indicated by the thickness slider
+     * @return the line thickness
+     */
+    public double getLineThinkness(){
+        return thickness.getValue();
+    }
+    
+    /**
+     * Sets the current line fill
+     * @param c 
+     *      the Color being set
+     */
+    public void setLineFill(Color c){
+        colorPickers.get(2).setValue(c);
+    }
+    
+    
     /**
      * Converts a Color object to a hex string (for use with ColorPicker objects)
      * @param c
@@ -351,7 +440,7 @@ public class Workspace extends AppWorkspaceComponent {
      * @return 
      *      The 7-character hex string beginning with a '#'
      */
-    public static String toHex(Color c){
+    /*public static String toHex(Color c){
         //First convert to their integer value
         int redInt = (int)(c.getRed() * 255);
         int greenInt = (int)(c.getGreen() * 255);
@@ -372,5 +461,5 @@ public class Workspace extends AppWorkspaceComponent {
         //Then concatenate
         String hexString = "#" + redString + greenString + blueString;
         return hexString;
-    }
+    } */
 }

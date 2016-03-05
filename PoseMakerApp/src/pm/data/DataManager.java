@@ -1,6 +1,7 @@
 package pm.data;
 
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
 
@@ -15,11 +16,14 @@ public class DataManager implements AppDataComponent {
     // THIS IS A SHARED REFERENCE TO THE APPLICATION
     AppTemplate app;
     
+    public static final Color defaultBackgroundColor = Color.WHITE;
+    
     private ArrayList<CustomShape> shapes;
+    private Color backgroundColor;
 
     /**
-     * THis constructor creates the data manager and sets up the
-     *
+     * This constructor creates the data manager and sets up the ArrayList of CustomShape objects.
+     * The ArrayList will contain all of the shapes we create, in order from bottom to top.
      *
      * @param initApp The application within which this data manager is serving.
      */
@@ -27,6 +31,7 @@ public class DataManager implements AppDataComponent {
 	// KEEP THE APP FOR LATER
 	app = initApp;
         shapes = new ArrayList<CustomShape>();
+        backgroundColor = defaultBackgroundColor;
     }
     
     /**
@@ -36,14 +41,20 @@ public class DataManager implements AppDataComponent {
     public ArrayList<CustomShape> getShapes(){
         return shapes;
     }
+    
+    public Color getBackgroundColor(){
+        return backgroundColor;
+    }
+    
+    public void setBackgroundColor(Color c){
+        backgroundColor = c;
+    }
 
     /**
-     * This function clears out the HTML tree and reloads it with the minimal
-     * tags, like html, head, and body such that the user can begin editing a
-     * page.
+     * This function clears out the ArrayList
      */
     @Override
     public void reset() {
-
+        shapes = new ArrayList<CustomShape>();
     }
 }

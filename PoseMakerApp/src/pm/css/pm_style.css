@@ -37,6 +37,15 @@
     -fx-border-color: #7777dd;
 }
 
+.left_toolbar {
+    -fx-background-color: #ccccff;
+    -fx-background-radius: 5.0;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-border-width: 2px;
+    -fx-border-color: #7777dd;
+}
+
 /* CSS CLASS FOR LABELS HEADING LARGE SECTIONS IN THE GUI */
 .heading_label {
     -fx-font-size: 20pt;
