@@ -32,14 +32,14 @@ public class WorkspaceController {
     String buttonSelected;
     
     //Keeps track of whether or not a shape is currently selected
-    boolean isSelected;
+    private boolean isSelected;
     
     //If a shape is currently selected, keeps track of the reference
-    CustomShape selectedShape;
+    private CustomShape selectedShape;
     
     //Keeps track of the selected shape's original stroke color, so it can be changed
     //back once the shape is no longer selected
-    Color originalStrokeColor;
+    private Color originalStrokeColor;
     
     //Keeps track of whether or not the mouse has been clicked and not released
     boolean isClicked;
@@ -137,10 +137,12 @@ public class WorkspaceController {
                     selectedShape = data.getShapes().get(i);
                     isSelected = true;
                     originalStrokeColor = selectedShape.getStrokeColor();
-                    selectedShape.setStrokeColor(HIGHLIGHT_COLOR);
                     
-                    //Reload the workspace to reflect the shape currently selected
+                    //Reload the workspace to reflect the shape currently selected, before setting its outline color to yellow
                     workspace.reloadControls(data.getShapes().get(i));
+                    
+                    selectedShape.setStrokeColor(HIGHLIGHT_COLOR);
+
                     workspace.reloadWorkspace();
                     break;
                 }
@@ -207,4 +209,15 @@ public class WorkspaceController {
         return false;
     }
     
+    public boolean getIsSelected(){
+        return isSelected;
+    }
+    
+    public CustomShape getSelectedShape(){
+        return selectedShape;
+    }
+    
+    public void setOriginalStrokeColor(Color c){
+        originalStrokeColor = c;
+    }
 }

@@ -236,8 +236,19 @@ public class Workspace extends AppWorkspaceComponent {
         });
         colorPickers.add(backgroundPicker);
         ColorPicker fillPicker = new ColorPicker();
+        fillPicker.setOnAction(e -> {
+           if(workspaceController.getIsSelected()){
+               workspaceController.getSelectedShape().setFillColor(fillPicker.getValue());
+               reloadWorkspace();
+           }
+        });
         colorPickers.add(fillPicker);
         ColorPicker outlinePicker = new ColorPicker(Color.BLACK);
+        outlinePicker.setOnAction(e -> {
+           if(workspaceController.getIsSelected()){
+               workspaceController.setOriginalStrokeColor(outlinePicker.getValue());
+           }
+        });
         colorPickers.add(outlinePicker);
         
         for(int i = 0; i < 3; i++){
@@ -259,6 +270,12 @@ public class Workspace extends AppWorkspaceComponent {
         
         //Initialize the thickness slider and add to oThicknessBar
         thickness = new Slider(1, 10, 1);
+        thickness.setOnMouseDragged(e -> {
+           if(workspaceController.getIsSelected()){
+               workspaceController.getSelectedShape().setLineWidth(thickness.getValue());
+               reloadWorkspace();
+           }
+        });
         oThicknessBar.getChildren().add(thickness);
         
         //Add toolbars to the editing toolbar
