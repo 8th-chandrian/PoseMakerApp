@@ -4,6 +4,9 @@
 package pm.controller;
 
 import javafx.scene.Cursor;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import pm.PoseMaker;
 import pm.data.CustomEllipse;
@@ -41,8 +44,10 @@ public class WorkspaceController {
     //back once the shape is no longer selected
     private Color originalStrokeColor;
     
-    //Keeps track of whether or not the mouse has been clicked and not released
-    boolean isClicked;
+    //Keeps track of whether or not the mouse has been clicked and not released, as well as original click coordinates
+    private boolean isClicked;
+    private int origX;
+    private int origY;
     
     public WorkspaceController(PoseMaker initapp){
         app = initapp;
@@ -120,6 +125,12 @@ public class WorkspaceController {
             workspace.reloadWorkspace();
         }
     }
+    
+    public void handleSnapshotButtonPress(Canvas canvas) {
+        //TODO: COMPLETE THIS METHOD, DOESN'T SAVE THE IMAGE ANYWHERE YET
+        WritableImage image = canvas.snapshot(new SnapshotParameters(), 
+                new WritableImage(Workspace.CANVAS_WIDTH, Workspace.CANVAS_HEIGHT));
+    }
 
     public void handleMouseEntered() {
         if(buttonSelected.equals(RECTANGLE) || buttonSelected.equals(ELLIPSE)){
@@ -134,17 +145,18 @@ public class WorkspaceController {
     }
 
     public void handleMousePressed(int xClick, int yClick) {
-        isClicked = true;
         
         DataManager data = (DataManager) app.getDataComponent();
         Workspace workspace = (Workspace) app.getWorkspaceComponent();
         if(buttonSelected.equals(RECTANGLE)){
+            isClicked = true;
             CustomRectangle newRectangle = new CustomRectangle(xClick, yClick, 0, 0, workspace.getShapeFill(), 
                 workspace.getLineFill(), workspace.getLineThinkness());
             data.getShapes().add(newRectangle);
             workspace.reloadWorkspace();
         }
         else if(buttonSelected.equals(ELLIPSE)){
+            isClicked = true;
             CustomEllipse newEllipse = new CustomEllipse(xClick, yClick, 0, 0, workspace.getShapeFill(), 
                 workspace.getLineFill(), workspace.getLineThinkness());
             data.getShapes().add(newEllipse);
@@ -156,6 +168,10 @@ public class WorkspaceController {
                     if(isSelected){
                         deselectShape();
                     }
+                    isClicked = true;
+                    origX = xClick;
+                    origY = yClick;
+                    
                     selectedShape = data.getShapes().get(i);
                     isSelected = true;
                     originalStrokeColor = selectedShape.getStrokeColor();
@@ -184,17 +200,21 @@ public class WorkspaceController {
                 toUpdate.setHeight(yDrag - toUpdate.getyValue());
                 workspace.reloadWorkspace();
             }
-            //THIS DOESN'T WORK, NEEDS FIXING
-            /*if(buttonSelected.equals(SELECTOR) && isSelected){
-                selectedShape.setxValue(xDrag);
-                selectedShape.setyValue(yDrag);
+            
+            if(buttonSelected.equals(SELECTOR) && isSelected){
+                selectedShape.setxValue(selectedShape.getxValue() + (xDrag - origX));
+                selectedShape.setyValue(selectedShape.getyValue() + (yDrag - origY));
+                origX = xDrag;
+                origY = yDrag;
                 workspace.reloadWorkspace();
-            }*/
+            }
         }
     }
 
     public void handleMouseReleased() {
         isClicked = false;
+        origX = 0;
+        origY = 0;
     }
     
     /**
@@ -250,4 +270,5 @@ public class WorkspaceController {
     public void setOriginalStrokeColor(Color c){
         originalStrokeColor = c;
     }
+
 }

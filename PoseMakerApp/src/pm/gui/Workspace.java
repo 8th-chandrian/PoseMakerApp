@@ -39,8 +39,8 @@ public class Workspace extends AppWorkspaceComponent {
     static final int CREATION_BUTTON_WIDTH = 50;
     static final int ORDER_BUTTON_WIDTH = 100;
     static final int CAMERA_BUTTON_WIDTH = 240;
-    static final int CANVAS_WIDTH = 1000;
-    static final int CANVAS_HEIGHT = 635;
+    public static final int CANVAS_WIDTH = 1000;
+    public static final int CANVAS_HEIGHT = 635;
     
     // HERE'S THE APP
     AppTemplate app;
@@ -203,9 +203,9 @@ public class Workspace extends AppWorkspaceComponent {
             //TODO: Add in handler for snapshot button press
             if(i == 6){
                 buttons.add(gui.initChildButton(screenshotBar, PropertyType.SNAPSHOT_ICON.toString(), 
-                    PropertyType.SNAPSHOT_ICON.toString(), false));
+                    PropertyType.SNAPSHOT_TOOLTIP.toString(), false));
                 buttons.get(i).setOnAction(e -> {
-                    workspaceController.handleSelectionButtonPress();
+                    workspaceController.handleSnapshotButtonPress(canvas);
                 });
                 buttons.get(i).setMaxWidth(CAMERA_BUTTON_WIDTH);
                 buttons.get(i).setMinWidth(CAMERA_BUTTON_WIDTH);
