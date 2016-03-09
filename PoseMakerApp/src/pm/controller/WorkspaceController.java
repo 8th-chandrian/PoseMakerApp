@@ -87,8 +87,16 @@ public class WorkspaceController {
     }
 
     public void handleRemoveButtonPress() {
-        //TODO: Add functionality to handle the remove button being pressed
-        //If a shape is currently selected, pressing the remove button should remove it from the rendering surface
+        if(isSelected){
+            DataManager data = (DataManager) app.getDataComponent();
+            Workspace workspace = (Workspace) app.getWorkspaceComponent();
+            
+            //Remove the shape, deselect it, and reload the buttons and workspace
+            data.getShapes().remove(selectedShape);
+            deselectShape();
+            workspace.reloadButtons(buttonSelected, isSelected);
+            workspace.reloadWorkspace();
+        }
     }
 
     public void handleBackButtonPress() {
@@ -142,7 +150,9 @@ public class WorkspaceController {
                     workspace.reloadControls(data.getShapes().get(i));
                     
                     selectedShape.setStrokeColor(HIGHLIGHT_COLOR);
-
+                    
+                    //Reload buttons to enable remove and forward/backward movement
+                    workspace.reloadButtons(buttonSelected, isSelected);
                     workspace.reloadWorkspace();
                     break;
                 }
@@ -160,6 +170,12 @@ public class WorkspaceController {
                 toUpdate.setHeight(yDrag - toUpdate.getyValue());
                 workspace.reloadWorkspace();
             }
+            //THIS DOESN'T WORK, NEEDS FIXING
+            /*if(buttonSelected.equals(SELECTOR) && isSelected){
+                selectedShape.setxValue(xDrag);
+                selectedShape.setyValue(yDrag);
+                workspace.reloadWorkspace();
+            }*/
         }
     }
 
