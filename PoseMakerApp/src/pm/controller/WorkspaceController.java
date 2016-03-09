@@ -100,11 +100,25 @@ public class WorkspaceController {
     }
 
     public void handleBackButtonPress() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(isSelected){
+            DataManager data = (DataManager) app.getDataComponent();
+            Workspace workspace = (Workspace) app.getWorkspaceComponent();
+            
+            data.getShapes().remove(selectedShape);
+            data.getShapes().add(0, selectedShape);
+            workspace.reloadWorkspace();
+        }
     }
 
     public void handleFrontButtonPress() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(isSelected){
+            DataManager data = (DataManager) app.getDataComponent();
+            Workspace workspace = (Workspace) app.getWorkspaceComponent();
+            
+            data.getShapes().remove(selectedShape);
+            data.getShapes().add(selectedShape);
+            workspace.reloadWorkspace();
+        }
     }
 
     public void handleMouseEntered() {
