@@ -177,12 +177,12 @@ public class WorkspaceController {
                     originalStrokeColor = selectedShape.getStrokeColor();
                     
                     //Reload the workspace to reflect the shape currently selected, before setting its outline color to yellow
-                    workspace.reloadControls(data.getShapes().get(i));
+                    //workspace.reloadControls(data.getShapes().get(i));
                     
                     selectedShape.setStrokeColor(HIGHLIGHT_COLOR);
                     
                     //Reload buttons to enable remove and forward/backward movement
-                    workspace.reloadButtons(buttonSelected, isSelected);
+                    //workspace.reloadButtons(buttonSelected, isSelected);
                     workspace.reloadWorkspace();
                     break;
                 }
@@ -269,6 +269,14 @@ public class WorkspaceController {
     
     public void setOriginalStrokeColor(Color c){
         originalStrokeColor = c;
+    }
+    
+    public String getButtonSelected(){
+        return buttonSelected;
+    }
+    
+    public Color getOriginalStrokeColor(){
+        return originalStrokeColor;
     }
 
 }

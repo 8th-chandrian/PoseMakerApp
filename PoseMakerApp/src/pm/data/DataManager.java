@@ -42,6 +42,10 @@ public class DataManager implements AppDataComponent {
         return shapes;
     }
     
+    public void setShapes(ArrayList<CustomShape> shapes){
+        this.shapes = shapes;
+    }
+    
     public Color getBackgroundColor(){
         return backgroundColor;
     }

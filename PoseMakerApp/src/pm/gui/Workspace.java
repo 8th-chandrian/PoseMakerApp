@@ -315,7 +315,6 @@ public class Workspace extends AppWorkspaceComponent {
         
         workspaceBP.setLeft(editToolbar);
         workspace.getChildren().add(workspaceBP);
-        reloadButtons(workspaceController.NOTHING_SELECTED, false);
         reloadWorkspace();
     }
     
@@ -342,12 +341,22 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
         DataManager data = (DataManager) app.getDataComponent();
+        
         //Draw a new rectangle with our background color
         gc.setFill(colorPickers.get(0).getValue());
         gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         
         for(int i = 0; i < data.getShapes().size(); i++){
             drawShape(data.getShapes().get(i));
+        }
+        
+        reloadButtons(workspaceController.getButtonSelected(), workspaceController.getIsSelected());
+        if(workspaceController.getIsSelected()){
+            reloadControls(workspaceController.getSelectedShape());
+            colorPickers.get(2).setValue(workspaceController.getOriginalStrokeColor());
+        }
+        if(workspaceController.getButtonSelected() == null){
+            reloadControls(null);
         }
     }
     
@@ -392,9 +401,16 @@ public class Workspace extends AppWorkspaceComponent {
     }
     
     public void reloadControls(CustomShape s){
-        colorPickers.get(1).setValue(s.getFillColor());
-        colorPickers.get(2).setValue(s.getStrokeColor());
-        thickness.setValue(s.getLineWidth());
+        if(s == null){
+            colorPickers.get(1).setValue(Color.WHITE);
+            colorPickers.get(2).setValue(Color.BLACK);
+            thickness.setValue(1);
+        }
+        else{
+            colorPickers.get(1).setValue(s.getFillColor());
+            colorPickers.get(2).setValue(s.getStrokeColor());
+            thickness.setValue(s.getLineWidth());
+        }
     }
     
     /**

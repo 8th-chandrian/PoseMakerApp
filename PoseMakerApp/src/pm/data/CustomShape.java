@@ -33,6 +33,19 @@ public class CustomShape{
         this.strokeColor = strokeColor;
         this.lineWidth = lineWidth;
     }
+    
+    /**
+     * For the lazy.
+     */
+    public CustomShape(){
+        this.xValue = 0;
+        this.yValue = 0;
+        this.width = 0;
+        this.height = 0;
+        this.fillColor = null;
+        this.strokeColor = null;
+        this.lineWidth = 0;
+    }
 
     /**
      * @return the xValue

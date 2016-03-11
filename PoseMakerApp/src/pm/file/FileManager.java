@@ -20,6 +20,7 @@ import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
+import pm.data.CustomEllipse;
 import pm.data.CustomRectangle;
 import pm.data.CustomShape;
 import pm.data.DataManager;
@@ -77,8 +78,8 @@ public class FileManager implements AppFileComponent {
 	
 	// THEN PUT IT ALL TOGETHER IN A JsonObject
 	JsonObject dataManagerJSO = Json.createObjectBuilder()
+                .add(JSON_BACKGROUND_CONTENT, toHex(dataManager.getBackgroundColor()))
 		.add(JSON_SHAPES_ARRAY, shapesArray)
-		.add(JSON_BACKGROUND_CONTENT, toHex(dataManager.getBackgroundColor()))
 		.build();
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
@@ -166,7 +167,20 @@ public class FileManager implements AppFileComponent {
      */
     @Override
     public void loadData(AppDataComponent data, String filePath) throws IOException {
-
+        // CLEAR THE OLD DATA OUT
+	DataManager dataManager = (DataManager)data;
+	dataManager.reset();
+	
+	// LOAD THE JSON FILE WITH ALL THE DATA
+	JsonObject json = loadJSONFile(filePath);
+	
+	// LOAD THE TAG TREE
+	JsonArray jsonShapeArray = json.getJsonArray(JSON_SHAPES_ARRAY);
+	loadShapes(jsonShapeArray, dataManager);
+	
+	// AND GET THE Background Color
+	String backgroundColor = json.getString(JSON_BACKGROUND_CONTENT);
+	dataManager.setBackgroundColor(hexToColor(backgroundColor));
     }
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -177,6 +191,39 @@ public class FileManager implements AppFileComponent {
 	jsonReader.close();
 	is.close();
 	return json;
+    }
+    
+    private void loadShapes(JsonArray jsonShapeArray, DataManager data){
+        ArrayList<CustomShape> shapes = new ArrayList<>();
+        
+        //Iterate through the array of json shapes, loading each into a new shape and adding it to shapes
+        for(int i = 0; i < jsonShapeArray.size(); i++){
+            JsonObject jsonShape = jsonShapeArray.getJsonObject(i);
+            if(jsonShape.getString(JSON_TYPE_RECTANGLE) != null){
+                CustomRectangle newRectangle = new CustomRectangle();
+                newRectangle.setxValue(jsonShape.getInt(JSON_X_COORDINATE));
+                newRectangle.setyValue(jsonShape.getInt(JSON_Y_COORDINATE));
+                newRectangle.setWidth(jsonShape.getInt(JSON_WIDTH));
+                newRectangle.setHeight(jsonShape.getInt(JSON_HEIGHT));
+                newRectangle.setLineWidth(Double.parseDouble(jsonShape.getString(JSON_LINE_WIDTH)));
+                newRectangle.setFillColor(hexToColor(jsonShape.getString(JSON_FILL_COLOR)));
+                newRectangle.setFillColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
+                shapes.add(newRectangle);
+            }
+            if(jsonShape.getString(JSON_TYPE_ELLIPSE) != null){
+                CustomEllipse newEllipse = new CustomEllipse();
+                newEllipse.setxValue(jsonShape.getInt(JSON_X_COORDINATE));
+                newEllipse.setyValue(jsonShape.getInt(JSON_Y_COORDINATE));
+                newEllipse.setWidth(jsonShape.getInt(JSON_WIDTH));
+                newEllipse.setHeight(jsonShape.getInt(JSON_HEIGHT));
+                newEllipse.setLineWidth(Double.parseDouble(jsonShape.getString(JSON_LINE_WIDTH)));
+                newEllipse.setFillColor(hexToColor(jsonShape.getString(JSON_FILL_COLOR)));
+                newEllipse.setFillColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
+                shapes.add(newEllipse);
+            }
+        }
+        
+        data.setShapes(shapes);
     }
     
     /**
@@ -236,5 +283,25 @@ public class FileManager implements AppFileComponent {
         //Then concatenate
         String hexString = "#" + redString + greenString + blueString;
         return hexString;
+    }
+    
+    /**
+     * Converts a hex string to a Color object
+     * @param hex
+     *      The 7-character hex string beginning with a '#'
+     * @return 
+     *      The Color object produced
+     */
+    private static Color hexToColor(String hex){
+        String redString = hex.substring(1, 3);
+        String greenString = hex.substring(3, 5);
+        String blueString = hex.substring(5);
+        
+        int redInt = Integer.parseInt(redString, 16);
+        int greenInt = Integer.parseInt(greenString, 16);
+        int blueInt = Integer.parseInt(blueString, 16);
+        
+        Color c = new Color(redInt, greenInt, blueInt, 1);
+        return c;
     }
 }

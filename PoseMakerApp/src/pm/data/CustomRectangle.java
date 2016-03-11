@@ -16,5 +16,9 @@ public class CustomRectangle extends CustomShape{
      */
     public CustomRectangle(int xValue, int yValue, int width, int height, Color fillColor, Color strokeColor, double lineWidth) {
         super(xValue, yValue, width, height, fillColor, strokeColor, lineWidth);
-    }  
+    }
+    
+    public CustomRectangle(){
+        super();
+    }
 }
