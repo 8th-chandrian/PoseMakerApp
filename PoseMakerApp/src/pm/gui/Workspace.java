@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import pm.PoseMaker;
 import pm.PropertyType;
 import pm.controller.WorkspaceController;
+import static pm.controller.WorkspaceController.HIGHLIGHT_COLOR;
 import pm.data.CustomEllipse;
 import pm.data.CustomRectangle;
 import pm.data.CustomShape;
@@ -343,7 +344,7 @@ public class Workspace extends AppWorkspaceComponent {
         DataManager data = (DataManager) app.getDataComponent();
         
         //Draw a new rectangle with our background color
-        gc.setFill(colorPickers.get(0).getValue());
+        gc.setFill(data.getBackgroundColor());
         gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         
         for(int i = 0; i < data.getShapes().size(); i++){
@@ -464,6 +465,18 @@ public class Workspace extends AppWorkspaceComponent {
      */
     public void setLineFill(Color c){
         colorPickers.get(2).setValue(c);
+    }
+    
+    public void setBackground(Color c){
+        colorPickers.get(0).setValue(c);
+    }
+    
+    public void tempDeselect(){
+        workspaceController.getSelectedShape().setStrokeColor(workspaceController.getOriginalStrokeColor());
+    }
+    
+    public void reselect(){
+        workspaceController.getSelectedShape().setStrokeColor(HIGHLIGHT_COLOR);
     }
     
     

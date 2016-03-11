@@ -19,8 +19,12 @@ import pm.data.CustomRectangle;
 import pm.data.CustomShape;
 import pm.data.DataManager;
 import pm.gui.Workspace;
+import properties_manager.PropertiesManager;
 import saf.AppTemplate;
+import static saf.settings.AppPropertyType.LOAD_ERROR_MESSAGE;
+import static saf.settings.AppPropertyType.LOAD_ERROR_TITLE;
 import static saf.settings.AppStartupConstants.PATH_WORK;
+import saf.ui.AppMessageDialogSingleton;
 
 /**
  *
@@ -35,6 +39,8 @@ public class WorkspaceController {
     public static final String NOTHING_SELECTED = "nothing";
     public static final Color HIGHLIGHT_COLOR = Color.YELLOW;
     public static final String SNAPSHOT_PATH = PATH_WORK + "Pose.png";
+    public static final String SAVE_SNAPSHOT_ERROR_MESSAGE = "An error occurred saving your snapshot.";
+    public static final String SAVE_SNAPSHOT_ERROR_TITLE = "Save Snapshot Error";
     
     PoseMaker app;
     
@@ -134,16 +140,16 @@ public class WorkspaceController {
     }
     
     public void handleSnapshotButtonPress(Canvas canvas) {
-        //TODO: COMPLETE THIS METHOD, DOESN'T SAVE THE IMAGE ANYWHERE YET
         WritableImage image = canvas.snapshot(null, 
                 new WritableImage(Workspace.CANVAS_WIDTH, Workspace.CANVAS_HEIGHT));
-        
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
         File pose = new File(SNAPSHOT_PATH);
         try{
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", pose);
         }
-        catch (IOException ioe){
-            ioe.printStackTrace();
+        catch (Exception e){
+            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+	    dialog.show(SAVE_SNAPSHOT_ERROR_TITLE, SAVE_SNAPSHOT_ERROR_MESSAGE);
         }
     }
 

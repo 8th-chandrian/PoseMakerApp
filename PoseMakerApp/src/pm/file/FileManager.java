@@ -70,7 +70,8 @@ public class FileManager implements AppFileComponent {
 
 	// BUILD THE HTMLTags ARRAY
 	DataManager dataManager = (DataManager)data;
-
+        dataManager.tempSaveDeselect();
+        
 	// THEN THE TREE
 	JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         fillArrayWithShapes(dataManager.getShapes(), arrayBuilder);
@@ -98,6 +99,8 @@ public class FileManager implements AppFileComponent {
 	PrintWriter pw = new PrintWriter(filePath);
 	pw.write(prettyPrinted);
 	pw.close();
+        
+        dataManager.saveReselect();
     }
     
     private void fillArrayWithShapes(ArrayList<CustomShape> list, JsonArrayBuilder arrayBuilder){

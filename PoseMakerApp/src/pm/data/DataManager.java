@@ -2,6 +2,7 @@ package pm.data;
 
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
+import pm.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
 
@@ -51,6 +52,8 @@ public class DataManager implements AppDataComponent {
     }
     
     public void setBackgroundColor(Color c){
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.setBackground(c);
         backgroundColor = c;
     }
 
@@ -61,5 +64,15 @@ public class DataManager implements AppDataComponent {
     public void reset() {
         shapes = new ArrayList<CustomShape>();
         backgroundColor = DEFAULT_BACKGROUND_COLOR;
+    }
+    
+    public void tempSaveDeselect(){
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.tempDeselect();
+    }
+    
+    public void saveReselect(){
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.reselect();
     }
 }
