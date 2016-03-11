@@ -358,6 +358,7 @@ public class Workspace extends AppWorkspaceComponent {
         if(workspaceController.getButtonSelected() == null){
             reloadControls(null);
         }
+        
     }
     
     public void reloadButtons(String selectedButton, boolean selectedShape){

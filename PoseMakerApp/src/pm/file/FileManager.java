@@ -199,26 +199,26 @@ public class FileManager implements AppFileComponent {
         //Iterate through the array of json shapes, loading each into a new shape and adding it to shapes
         for(int i = 0; i < jsonShapeArray.size(); i++){
             JsonObject jsonShape = jsonShapeArray.getJsonObject(i);
-            if(jsonShape.getString(JSON_TYPE_RECTANGLE) != null){
+            if(jsonShape.getString(JSON_SHAPE_TYPE).equals(JSON_TYPE_RECTANGLE)){
                 CustomRectangle newRectangle = new CustomRectangle();
                 newRectangle.setxValue(jsonShape.getInt(JSON_X_COORDINATE));
                 newRectangle.setyValue(jsonShape.getInt(JSON_Y_COORDINATE));
                 newRectangle.setWidth(jsonShape.getInt(JSON_WIDTH));
                 newRectangle.setHeight(jsonShape.getInt(JSON_HEIGHT));
-                newRectangle.setLineWidth(Double.parseDouble(jsonShape.getString(JSON_LINE_WIDTH)));
+                newRectangle.setLineWidth((jsonShape.getJsonNumber(JSON_LINE_WIDTH).doubleValue()));
                 newRectangle.setFillColor(hexToColor(jsonShape.getString(JSON_FILL_COLOR)));
-                newRectangle.setFillColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
+                newRectangle.setStrokeColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
                 shapes.add(newRectangle);
             }
-            if(jsonShape.getString(JSON_TYPE_ELLIPSE) != null){
+            if(jsonShape.getString(JSON_SHAPE_TYPE).equals(JSON_TYPE_ELLIPSE)){
                 CustomEllipse newEllipse = new CustomEllipse();
                 newEllipse.setxValue(jsonShape.getInt(JSON_X_COORDINATE));
                 newEllipse.setyValue(jsonShape.getInt(JSON_Y_COORDINATE));
                 newEllipse.setWidth(jsonShape.getInt(JSON_WIDTH));
                 newEllipse.setHeight(jsonShape.getInt(JSON_HEIGHT));
-                newEllipse.setLineWidth(Double.parseDouble(jsonShape.getString(JSON_LINE_WIDTH)));
+                newEllipse.setLineWidth((jsonShape.getJsonNumber(JSON_LINE_WIDTH).doubleValue()));
                 newEllipse.setFillColor(hexToColor(jsonShape.getString(JSON_FILL_COLOR)));
-                newEllipse.setFillColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
+                newEllipse.setStrokeColor(hexToColor(jsonShape.getString(JSON_LINE_COLOR)));
                 shapes.add(newEllipse);
             }
         }
@@ -301,7 +301,7 @@ public class FileManager implements AppFileComponent {
         int greenInt = Integer.parseInt(greenString, 16);
         int blueInt = Integer.parseInt(blueString, 16);
         
-        Color c = new Color(redInt, greenInt, blueInt, 1);
+        Color c = Color.rgb(redInt, greenInt, blueInt);
         return c;
     }
 }

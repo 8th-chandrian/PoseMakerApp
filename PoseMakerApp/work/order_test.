@@ -1,0 +1,26 @@
+
+{
+    "background_content":"#ffffff",
+    "shapes_array":[
+        {
+            "shape_type":"rectangle",
+            "x_coordinate":106,
+            "y_coordinate":58,
+            "width":779,
+            "height":502,
+            "line_width":10.0,
+            "line_color":"#ff6666",
+            "fill_color":"#334db3"
+        },
+        {
+            "shape_type":"ellipse",
+            "x_coordinate":270,
+            "y_coordinate":176,
+            "width":456,
+            "height":267,
+            "line_width":10.0,
+            "line_color":"#ffccff",
+            "fill_color":"#ccffff"
+        }
+    ]
+}
