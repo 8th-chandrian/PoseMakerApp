@@ -16,7 +16,7 @@ public class DataManager implements AppDataComponent {
     // THIS IS A SHARED REFERENCE TO THE APPLICATION
     AppTemplate app;
     
-    public static final Color defaultBackgroundColor = Color.WHITE;
+    public static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
     
     private ArrayList<CustomShape> shapes;
     private Color backgroundColor;
@@ -31,7 +31,7 @@ public class DataManager implements AppDataComponent {
 	// KEEP THE APP FOR LATER
 	app = initApp;
         shapes = new ArrayList<CustomShape>();
-        backgroundColor = defaultBackgroundColor;
+        backgroundColor = DEFAULT_BACKGROUND_COLOR;
     }
     
     /**
@@ -56,5 +56,6 @@ public class DataManager implements AppDataComponent {
     @Override
     public void reset() {
         shapes = new ArrayList<CustomShape>();
+        backgroundColor = DEFAULT_BACKGROUND_COLOR;
     }
 }
