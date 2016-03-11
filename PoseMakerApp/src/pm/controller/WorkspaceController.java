@@ -3,11 +3,16 @@
  */
 package pm.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javax.imageio.ImageIO;
 import pm.PoseMaker;
 import pm.data.CustomEllipse;
 import pm.data.CustomRectangle;
@@ -15,6 +20,7 @@ import pm.data.CustomShape;
 import pm.data.DataManager;
 import pm.gui.Workspace;
 import saf.AppTemplate;
+import static saf.settings.AppStartupConstants.PATH_WORK;
 
 /**
  *
@@ -28,6 +34,7 @@ public class WorkspaceController {
     public static final String SELECTOR = "selector";
     public static final String NOTHING_SELECTED = "nothing";
     public static final Color HIGHLIGHT_COLOR = Color.YELLOW;
+    public static final String SNAPSHOT_PATH = PATH_WORK + "Pose.png";
     
     PoseMaker app;
     
@@ -128,8 +135,16 @@ public class WorkspaceController {
     
     public void handleSnapshotButtonPress(Canvas canvas) {
         //TODO: COMPLETE THIS METHOD, DOESN'T SAVE THE IMAGE ANYWHERE YET
-        WritableImage image = canvas.snapshot(new SnapshotParameters(), 
+        WritableImage image = canvas.snapshot(null, 
                 new WritableImage(Workspace.CANVAS_WIDTH, Workspace.CANVAS_HEIGHT));
+        
+        File pose = new File(SNAPSHOT_PATH);
+        try{
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", pose);
+        }
+        catch (IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
     public void handleMouseEntered() {
@@ -175,14 +190,8 @@ public class WorkspaceController {
                     selectedShape = data.getShapes().get(i);
                     isSelected = true;
                     originalStrokeColor = selectedShape.getStrokeColor();
-                    
-                    //Reload the workspace to reflect the shape currently selected, before setting its outline color to yellow
-                    //workspace.reloadControls(data.getShapes().get(i));
-                    
                     selectedShape.setStrokeColor(HIGHLIGHT_COLOR);
-                    
-                    //Reload buttons to enable remove and forward/backward movement
-                    //workspace.reloadButtons(buttonSelected, isSelected);
+
                     workspace.reloadWorkspace();
                     break;
                 }
